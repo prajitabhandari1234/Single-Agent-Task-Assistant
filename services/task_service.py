@@ -67,6 +67,7 @@ class TaskService:
                 # Replace the old task with the updated task
                 self.tasks[index] = updated_task
 
+                # Return the updated task
                 return updated_task
 
         # Return None if the task does not exist
@@ -85,7 +86,14 @@ class TaskService:
                 # Remove the task from the list
                 del self.tasks[index]
 
+                # Return True when deletion is successful
                 return True
 
         # Return False if the task was not found
         return False
+
+
+# Create one shared TaskService instance
+# The API routes and AI agent tools will use this same instance
+# so they can access the same in-memory task data.
+task_service = TaskService()
