@@ -1,8 +1,11 @@
 # Import FastAPI
 from fastapi import FastAPI
 
-# Import task routes
+# Import normal task routes
 from api.routes import router
+
+# Import AI agent routes
+from api.agent_routes import router as agent_router
 
 
 # Create the FastAPI application
@@ -13,8 +16,11 @@ app = FastAPI(
 )
 
 
-# Register the task API routes
+# Register normal task routes
 app.include_router(router)
+
+# Register AI agent routes
+app.include_router(agent_router)
 
 
 # Root endpoint
