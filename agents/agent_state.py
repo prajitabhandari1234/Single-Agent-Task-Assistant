@@ -48,6 +48,28 @@ class AgentState:
 
         self.error_count += 1
 
+    def reset_run_state(self):
+        """
+        Reset state values that belong only
+        to the current agent run.
+        """
+
+        # No tool has been used yet in the new run
+        self.last_tool_call = None
+
+    def get_state_snapshot(self):
+        """
+        Return a snapshot of the current agent state
+        for logging and debugging.
+        """
+
+        return {
+            "last_suggestion": self.last_suggestion,
+            "error_count": self.error_count,
+            "history_count": len(self.history),
+            "last_tool_call": self.last_tool_call
+        }
+
 
 # Create one shared state object for the Due Date Agent
 agent_state = AgentState()

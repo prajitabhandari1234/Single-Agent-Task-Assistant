@@ -1,6 +1,9 @@
 # Import logging so API activity can be recorded
 import logging
 
+# Import Literal so priority can be restricted to supported values
+from typing import Literal
+
 # Import FastAPI routing and HTTP error tools
 from fastapi import APIRouter, HTTPException
 
@@ -13,11 +16,13 @@ from agents.due_date_agent import suggest_due_date
 # Import shared agent state
 from agents.agent_state import agent_state
 
+
 # Create a logger for this API module
 logger = logging.getLogger(__name__)
 
 # Ensure INFO messages from this module are displayed
 logger.setLevel(logging.INFO)
+
 
 # Create a router specifically for AI agent endpoints
 router = APIRouter(
@@ -33,7 +38,11 @@ class DueDateRequest(BaseModel):
     """
 
     # Existing task ID is optional
-    task_id: int | None = None
+    # If supplied, it must be 1 or greater
+    task_id: int | None = Field(
+        default=None,
+        ge=1
+    )
 
     # Task title is required
     # It must contain between 1 and 100 characters
@@ -45,8 +54,12 @@ class DueDateRequest(BaseModel):
     # Description is optional
     description: str = ""
 
-    # Priority defaults to normal
-    priority: str = "normal"
+    # Only supported priority values are accepted
+    priority: Literal[
+        "low",
+        "normal",
+        "high"
+    ] = "normal"
 
 
 # Defines the structured response returned by the agent endpoint
@@ -105,7 +118,7 @@ def suggest_due_date_endpoint(
         # Record the failure in AgentState
         agent_state.record_error()
 
-        # Record the API failure in the agent history
+        # Record the API failure in agent history
         agent_state.record_action(
             f"Agent endpoint error: {str(error)}"
         )
@@ -115,7 +128,7 @@ def suggest_due_date_endpoint(
             "Due date agent endpoint failed"
         )
 
-        # Return HTTP 500 if an unexpected error reaches the API layer
+        # Return HTTP 500 for unexpected errors
         raise HTTPException(
             status_code=500,
             detail="Agent failed to generate due date."

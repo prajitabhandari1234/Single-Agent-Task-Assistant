@@ -72,13 +72,13 @@ due_date_chain = prompt_template | llm
 
 def get_fallback_date(priority: str) -> str:
     """
-    Return a deterministic fallback date when the AI output
-    cannot be safely used.
+    Return a deterministic fallback date when
+    the AI output cannot be safely used.
     """
 
     today = date.today()
 
-    # Use different fallback periods based on task priority
+    # Use different fallback periods based on priority
     if priority.lower() == "high":
         fallback = today + timedelta(days=3)
 
@@ -98,13 +98,13 @@ def validate_due_date(value: str) -> bool:
     """
 
     try:
-        # Convert the text into a Python date
+        # Convert text into a Python date
         suggested_date = datetime.strptime(
             value,
             "%Y-%m-%d"
         ).date()
 
-        # Reject dates before today
+        # Reject past dates
         if suggested_date < date.today():
             return False
 
@@ -154,6 +154,18 @@ def suggest_due_date(
     task tools, state management, validation and fallback logic.
     """
 
+    # Save the state before this agent run
+    previous_state = agent_state.get_state_snapshot()
+
+    # Reset values that only belong to the current run
+    agent_state.reset_run_state()
+
+    # Log the state before execution
+    logger.info(
+        "Agent state before run: %s",
+        previous_state
+    )
+
     # Record the start of the agent run
     agent_state.record_action(
         f"Due date requested for task: {title}"
@@ -178,7 +190,9 @@ def suggest_due_date(
             )
 
             # Update state with tool usage
-            agent_state.record_tool_call("lookup_task")
+            agent_state.record_tool_call(
+                "lookup_task"
+            )
 
             agent_state.record_action(
                 f"lookup_task called for task ID {task_id}"
@@ -192,7 +206,7 @@ def suggest_due_date(
         # Get today's date for the prompt
         today = date.today().isoformat()
 
-        # Send task information through the LangChain workflow
+        # Send task information through LangChain
         response = due_date_chain.invoke(
             {
                 "today": today,
@@ -204,7 +218,9 @@ def suggest_due_date(
         )
 
         # Extract text from the Gemini response
-        raw_suggestion = extract_response_text(response)
+        raw_suggestion = extract_response_text(
+            response
+        )
 
         logger.info(
             "Raw Gemini output: %s",
@@ -222,8 +238,10 @@ def suggest_due_date(
             )
 
         else:
-            # Use deterministic fallback when output is invalid
-            suggestion = get_fallback_date(priority)
+            # Use deterministic fallback if output is invalid
+            suggestion = get_fallback_date(
+                priority
+            )
 
             agent_state.record_error()
 
@@ -241,8 +259,10 @@ def suggest_due_date(
                 suggestion
             )
 
-        # Store the final suggestion in state
-        agent_state.update_suggestion(suggestion)
+        # Store final suggestion in state
+        agent_state.update_suggestion(
+            suggestion
+        )
 
         agent_state.record_action(
             f"Final due date suggestion: {suggestion}"
@@ -251,6 +271,14 @@ def suggest_due_date(
         logger.info(
             "Final due date suggestion: %s",
             suggestion
+        )
+
+        # Capture and log updated state
+        current_state = agent_state.get_state_snapshot()
+
+        logger.info(
+            "Agent state after run: %s",
+            current_state
         )
 
         return suggestion
@@ -267,10 +295,14 @@ def suggest_due_date(
             "Due date agent failed"
         )
 
-        # Use fallback instead of allowing the whole agent to fail
-        fallback = get_fallback_date(priority)
+        # Use fallback instead of allowing the agent to fail
+        fallback = get_fallback_date(
+            priority
+        )
 
-        agent_state.update_suggestion(fallback)
+        agent_state.update_suggestion(
+            fallback
+        )
 
         agent_state.record_action(
             f"Fallback due date used after error: {fallback}"
@@ -279,6 +311,14 @@ def suggest_due_date(
         logger.info(
             "Fallback due date after error: %s",
             fallback
+        )
+
+        # Log state after fallback
+        current_state = agent_state.get_state_snapshot()
+
+        logger.info(
+            "Agent state after fallback: %s",
+            current_state
         )
 
         return fallback
