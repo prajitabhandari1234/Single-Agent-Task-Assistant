@@ -6,8 +6,6 @@ The project extends a standard task-management REST API with a **single AI Due D
 
 The application also includes LangChain tool usage, internal agent state, input/output validation, deterministic fallback logic, logging, and automated testing with pytest.
 
----
-
 ## Features
 
 ### Task Management
@@ -36,8 +34,6 @@ The Due Date Agent can:
 - Record agent state and activity
 - Produce logs for debugging and observability
 
----
-
 ## Technology Stack
 
 - Python 3.11
@@ -52,7 +48,6 @@ The Due Date Agent can:
 - HTTPX
 - python-dotenv
 
----
 
 ## Project Structure
 
@@ -99,8 +94,6 @@ Single-Agent-Task-Assistant/
 ├── requirements.txt
 └── README.md
 ```
-
----
 
 ## System Architecture
 
@@ -157,8 +150,6 @@ AI Date              Fallback Date
       Structured API Response
 ```
 
----
-
 ## Agent Prompt
 
 The Due Date Agent uses a LangChain `ChatPromptTemplate`.
@@ -179,8 +170,6 @@ The agent is instructed to:
 4. Return no additional explanation.
 
 The generated output is still validated by Python before it is accepted.
-
----
 
 ## LangChain Tool
 
@@ -207,8 +196,6 @@ The tool can provide the agent with:
 - Existing due date
 
 This allows the agent to use information already stored by the task-management application.
-
----
 
 ## Agent State
 
@@ -241,8 +228,6 @@ Stores the most recently used LangChain tool.
 
 The application logs important state information to make agent behaviour easier to inspect and debug.
 
----
-
 ## Due Date Validation
 
 AI-generated output is not trusted automatically.
@@ -269,8 +254,6 @@ next Friday
 
 is rejected because it does not match the required format.
 
----
-
 ## Fallback Guardrails
 
 If Gemini returns an invalid response or an unexpected LLM error occurs, the application generates a deterministic fallback date.
@@ -294,8 +277,6 @@ today + 3 days
 ```
 
 This prevents malformed LLM output from causing the complete agent workflow to fail.
-
----
 
 # API Endpoints
 
@@ -331,15 +312,11 @@ Example request:
 }
 ```
 
----
-
 ## Get All Tasks
 
 ```http
 GET /tasks
 ```
-
----
 
 ## Get Task by ID
 
@@ -353,23 +330,17 @@ Example:
 GET /tasks/1
 ```
 
----
-
 ## Update Task
 
 ```http
 PUT /tasks/{task_id}
 ```
 
----
-
 ## Delete Task
 
 ```http
 DELETE /tasks/{task_id}
 ```
-
----
 
 # AI Agent Endpoint
 
@@ -411,8 +382,6 @@ Example request without an existing task:
 }
 ```
 
----
-
 ## Input Validation
 
 The API validates incoming data before calling the agent.
@@ -444,8 +413,6 @@ FastAPI returns:
 
 This acts as an input guardrail and prevents invalid data from reaching the AI workflow.
 
----
-
 # Installation and Setup
 
 The following instructions explain how to install and run the project on both **Windows** and **macOS**.
@@ -459,8 +426,6 @@ Before installing the project, make sure you have:
 - Git
 - Internet connection
 - Google Gemini API key
-
----
 
 # Windows Installation
 
@@ -480,8 +445,6 @@ git --version
 
 The project was developed using Python 3.11.
 
----
-
 ## 2. Clone the Repository
 
 Clone the GitHub repository:
@@ -495,8 +458,6 @@ Move into the project directory:
 ```powershell
 cd Single-Agent-Task-Assistant
 ```
-
----
 
 ## 3. Create a Virtual Environment
 
@@ -538,8 +499,6 @@ If using Windows Command Prompt instead of PowerShell:
 .venv\Scripts\activate.bat
 ```
 
----
-
 ## 4. Upgrade pip
 
 Run:
@@ -547,8 +506,6 @@ Run:
 ```powershell
 python -m pip install --upgrade pip
 ```
-
----
 
 ## 5. Install Dependencies
 
@@ -559,8 +516,6 @@ pip install -r requirements.txt
 ```
 
 This installs the libraries required by the application, including FastAPI, Uvicorn, LangChain, Google Gemini integration, Pydantic, pytest, HTTPX, and python-dotenv.
-
----
 
 ## 6. Configure the Gemini API Key
 
@@ -592,8 +547,6 @@ your_gemini_api_key_here
 
 with your actual Gemini API key.
 
----
-
 ## 7. Run the Application
 
 Start the FastAPI application:
@@ -614,8 +567,6 @@ The application will run locally at:
 http://127.0.0.1:8000
 ```
 
----
-
 ## 8. Open Swagger UI
 
 Open a browser and go to:
@@ -625,8 +576,6 @@ http://127.0.0.1:8000/docs
 ```
 
 Swagger UI can be used to manually test the CRUD endpoints and the AI Due Date Agent.
-
----
 
 ## 9. Run Automated Tests
 
@@ -650,8 +599,6 @@ To run only the Due Date Agent tests:
 pytest tests/test_due_date_agent.py -v
 ```
 
----
-
 ## 10. Stop the Application
 
 Press:
@@ -667,8 +614,6 @@ To deactivate the virtual environment:
 ```powershell
 deactivate
 ```
-
----
 
 # macOS Installation
 
@@ -690,8 +635,6 @@ git --version
 
 The project was developed using Python 3.11.
 
----
-
 ## 2. Clone the Repository
 
 Clone the GitHub repository:
@@ -705,8 +648,6 @@ Move into the project:
 ```bash
 cd Single-Agent-Task-Assistant
 ```
-
----
 
 ## 3. Create a Virtual Environment
 
@@ -728,8 +669,6 @@ After activation, the terminal should display something similar to:
 (.venv) user@MacBook Single-Agent-Task-Assistant %
 ```
 
----
-
 ## 4. Upgrade pip
 
 Run:
@@ -737,8 +676,6 @@ Run:
 ```bash
 python -m pip install --upgrade pip
 ```
-
----
 
 ## 5. Install Dependencies
 
@@ -753,8 +690,6 @@ Alternatively:
 ```bash
 python -m pip install -r requirements.txt
 ```
-
----
 
 ## 6. Configure the Gemini API Key
 
@@ -792,8 +727,6 @@ Press Enter, then exit using:
 Control + X
 ```
 
----
-
 ## 7. Run the Application
 
 Start the FastAPI application:
@@ -820,8 +753,6 @@ The application will run locally at:
 http://127.0.0.1:8000
 ```
 
----
-
 ## 8. Open Swagger UI
 
 Open a browser and go to:
@@ -839,8 +770,6 @@ Swagger UI can be used to test:
 - Due Date Agent
 - Request validation
 - Structured responses
-
----
 
 ## 9. Run Automated Tests
 
@@ -862,8 +791,6 @@ To run only the Due Date Agent tests:
 pytest tests/test_due_date_agent.py -v
 ```
 
----
-
 ## 10. Stop the Application
 
 Press:
@@ -879,8 +806,6 @@ Deactivate the virtual environment:
 ```bash
 deactivate
 ```
-
----
 
 # Quick Start
 
@@ -909,8 +834,6 @@ Then open:
 http://127.0.0.1:8000/docs
 ```
 
----
-
 ## macOS
 
 ```bash
@@ -935,8 +858,6 @@ Then open:
 ```text
 http://127.0.0.1:8000/docs
 ```
-
----
 
 # Environment Configuration
 
@@ -969,8 +890,6 @@ A safe `.env.example` file should contain:
 GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
----
-
 # Troubleshooting
 
 ## Gemini API Key Missing
@@ -988,8 +907,6 @@ check that:
 3. The placeholder has been replaced with a valid API key.
 4. Uvicorn has been restarted after changing `.env`.
 
----
-
 ## Module Not Found
 
 If Python reports that a module cannot be found, confirm that the virtual environment is activated.
@@ -999,8 +916,6 @@ Then run:
 ```bash
 pip install -r requirements.txt
 ```
-
----
 
 ## Port 8000 Already in Use
 
@@ -1015,8 +930,6 @@ Then open:
 ```text
 http://127.0.0.1:8001/docs
 ```
-
----
 
 ## Virtual Environment Is Not Active
 
@@ -1033,8 +946,6 @@ On macOS, it normally begins with:
 ```
 
 If `(.venv)` is not displayed, activate the environment again before running the application.
-
----
 
 # Testing
 
@@ -1053,8 +964,6 @@ The completed test suite produced:
 ```
 
 The warnings are deprecation warnings and do not represent test failures.
-
----
 
 ## Test Coverage
 
@@ -1077,8 +986,6 @@ The tests cover:
 - LLM exceptions
 - Agent fallback behaviour
 - State updates
-
----
 
 ## Mocked LLM Testing
 
@@ -1106,8 +1013,6 @@ This allows agent behaviour to be tested without:
 - Consuming API quota
 - Receiving unpredictable LLM responses
 
----
-
 # Failure Testing
 
 The agent was deliberately tested against several failure scenarios.
@@ -1128,8 +1033,6 @@ Validation failed
 → agent continued successfully
 ```
 
----
-
 ## Empty LLM Output
 
 Example:
@@ -1144,8 +1047,6 @@ Result:
 Empty response rejected
 → fallback date generated
 ```
-
----
 
 ## LLM Exception
 
@@ -1165,8 +1066,6 @@ Exception recorded
 ```
 
 These tests demonstrate that the application does not rely on the LLM always returning a valid response.
-
----
 
 # Logging and Observability
 
@@ -1190,8 +1089,6 @@ Errors and fallback decisions are also logged.
 
 This helps with debugging and evaluating agent behaviour.
 
----
-
 # Limitations
 
 The current version has several limitations.
@@ -1204,8 +1101,6 @@ Restarting the application clears stored data.
 
 This means that if a task is created and the Uvicorn server is restarted, the task must be created again before its `task_id` can be used by the Due Date Agent.
 
----
-
 ## Simple Fallback Strategy
 
 Fallback dates are based only on priority and do not consider:
@@ -1216,21 +1111,15 @@ Fallback dates are based only on priority and do not consider:
 - Calendar availability
 - Actual assignment deadlines
 
----
-
 ## LLM Date Suitability
 
 Validation ensures that the output is correctly formatted and not in the past, but it cannot guarantee that every AI-generated date is the ideal deadline.
-
----
 
 ## Tool Selection
 
 The `lookup_task` tool is called by the application when a `task_id` is supplied.
 
 The LLM does not currently autonomously decide when the tool should be called.
-
----
 
 # Future Improvements
 
@@ -1247,8 +1136,6 @@ Possible future improvements include:
 - Additional integration tests
 - Deployment to a cloud environment
 
----
-
 # Security
 
 The Gemini API key is stored using an environment variable and is not hard-coded into the application.
@@ -1263,8 +1150,6 @@ to the repository.
 
 If an API key is accidentally committed or publicly exposed, it should be revoked and replaced immediately.
 
----
-
 # AI Assistance Declaration
 
 Generative AI tools were used during the development of this assignment as a supporting resource for understanding technical concepts, troubleshooting implementation issues, reviewing code structure, improving documentation, and assisting with the testing and development process.
@@ -1272,8 +1157,6 @@ Generative AI tools were used during the development of this assignment as a sup
 AI-generated suggestions were reviewed, tested, and adapted before being incorporated into the project. The final implementation was developed and verified through the FastAPI application, LangChain-based Due Date Agent, Google Gemini integration, agent state management, tool usage, validation and fallback mechanisms, logging, and automated testing using pytest. Git and GitHub were used throughout the development process to maintain version history and document incremental changes.
 
 The final application reflects my understanding of the implemented architecture, FastAPI endpoint integration, LangChain and LLM integration, agent state management, tool usage, input and output validation, fallback and error handling, logging, and automated testing. All final implementation decisions, testing results, and submitted work were reviewed and verified by me.
-
----
 
 # Author
 
